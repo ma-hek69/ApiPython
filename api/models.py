@@ -17,3 +17,11 @@ class Student(models.Model):
 
     def __str__(self):
         return self.name
+    
+    
+class FileUpload(models.Model):
+    file = models.FileField(upload_to='uploads/')  # Indentation is important here
+    uploaded_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"File {self.file.name} uploaded at {self.uploaded_at}"
