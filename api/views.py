@@ -5,6 +5,11 @@ from .serializers import ProductSerializer
 from .serializers import StudentSerializer
 from .models import FileUpload
 from .serializers import FileUploadSerializer
+from django.shortcuts import render
+
+
+def form_view(request):
+    return render(request, 'form.html')
 
 class ProductViewSet(viewsets.ModelViewSet):
     queryset = Product.objects.all()  # Get all Product objects

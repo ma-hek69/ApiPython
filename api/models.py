@@ -25,3 +25,5 @@ class FileUpload(models.Model):
 
     def __str__(self):
         return f"File {self.file.name} uploaded at {self.uploaded_at}"
+    
+   
