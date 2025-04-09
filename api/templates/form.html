@@ -309,68 +309,163 @@
                 });
         }
 
-        // Edit Product
-        function editProduct(id) {
-            console.log('Editing product:', id);
-            fetch(`/api/products/${id}`)
-                .then(response => response.json())
-                .then(data => {
-                    document.getElementById('productName').value = data.name;
-                    document.getElementById('productPrice').value = data.price;
-                    document.getElementById('productDescription').value = data.description;
-                    // Update the form submission to update the product
-                    const productForm = document.getElementById('productForm');
-                    productForm.onsubmit = function (event) {
-                        event.preventDefault();
-                        updateProduct(id);
-                    };
-                })
-                .catch(error => console.error('Error fetching product details:', error));
-        }
+      // Edit Product
+function editProduct(id) {
+    console.log('Editing product:', id);
+    fetch(`/api/products/${id}/`)  // 👈 fixed trailing slash
+        .then(response => response.json())
+        .then(data => {
+            document.getElementById('productName').value = data.name;
+            document.getElementById('productPrice').value = data.price;
+            document.getElementById('productDescription').value = data.description;
+            const productForm = document.getElementById('productForm');
+            productForm.onsubmit = function (event) {
+                event.preventDefault();
+                updateProduct(id);
+            };
+        })
+        .catch(error => console.error('Error fetching product details:', error));
+}
 
-        // Update Product
-        function updateProduct(id) {
-            const updatedProduct = {
-                name: document.getElementById('productName').value,
-                price: document.getElementById('productPrice').value,
-                description: document.getElementById('productDescription').value
+// Update Product
+function updateProduct(id) {
+    const updatedProduct = {
+        name: document.getElementById('productName').value,
+        price: document.getElementById('productPrice').value,
+        description: document.getElementById('productDescription').value
+    };
+
+    fetch(`/api/products/${id}/`, {  // 👈 fixed trailing slash
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(updatedProduct)
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Product updated successfully');
+            fetchProducts();
+        } else {
+            alert('Failed to update product');
+        }
+    })
+    .catch(error => console.error('Error updating product:', error));
+}
+
+// Delete Product
+function deleteProduct(id) {
+    fetch(`/api/products/${id}/`, {  // 👈 fixed trailing slash
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('Product deleted successfully');
+            fetchProducts();
+        } else {
+            alert('Failed to delete product');
+        }
+    })
+    .catch(error => console.error('Error deleting product:', error));
+}
+
+// Edit File
+function editFile(id) {
+    console.log('Editing file:', id);
+    fetch(`/api/file-upload/${id}/`)  // 👈 fixed trailing slash
+        .then(response => response.json())
+        .then(data => {
+            alert('File editing is not supported in this example.');
+        })
+        .catch(error => console.error('Error fetching file details:', error));
+}
+
+// Delete File
+function deleteFile(id) {
+    fetch(`/api/file-upload/${id}/`, {  // 👈 fixed trailing slash
+        method: 'DELETE'
+    })
+    .then(response => {
+        if (response.ok) {
+            alert('File deleted successfully');
+            fetchFileUploads();
+        } else {
+            alert('Failed to delete file');
+        }
+    })
+    .catch(error => console.error('Error deleting file:', error));
+}
+
+
+        // Update Student
+        function updateStudent(id) {
+            const updatedStudent = {
+                name: document.getElementById('studentName').value,
+                age: document.getElementById('studentAge').value,
+                email: document.getElementById('studentEmail').value,
+                enrolled: document.getElementById('studentEnrolled').value === 'true'
             };
 
-            fetch(`/api/products/${id}`, {
+            fetch(`/api/students/${id}/`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
                 },
-                body: JSON.stringify(updatedProduct)
+                body: JSON.stringify(updatedStudent)
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Product updated successfully');
-                    fetchProducts();  // Refresh product list
+                    alert('Student updated successfully');
+                    fetchStudents();  // Refresh student list
                 } else {
-                    alert('Failed to update product');
+                    alert('Failed to update student');
                 }
             })
-            .catch(error => console.error('Error updating product:', error));
+            .catch(error => console.error('Error updating student:', error));
         }
 
-        // Delete Product
-        function deleteProduct(id) {
-            fetch(`/api/products/${id}`, {
+        // Delete Student
+        function deleteStudent(id) {
+            fetch(`/api/students/${id}/`, {
                 method: 'DELETE'
             })
             .then(response => {
                 if (response.ok) {
-                    alert('Product deleted successfully');
-                    fetchProducts();  // Refresh the product list
+                    alert('Student deleted successfully');
+                    fetchStudents();  // Refresh the student list
                 } else {
-                    alert('Failed to delete product');
+                    alert('Failed to delete student');
                 }
             })
-            .catch(error => console.error('Error deleting product:', error));
+            .catch(error => console.error('Error deleting student:', error));
         }
 
-        // Similarly, implement `editStudent`, `deleteStudent`, `editFile`, `deleteFile`
+        // Edit File
+        function editFile(id) {
+            console.log('Editing file:', id);
+            fetch(`/api/file-upload/${id}`)
+                .then(response => response.json())
+                .then(data => {
+                    alert('File editing is not supported in this example.');  // Modify as per your API design
+                })
+                .catch(error => console.error('Error fetching file details:', error));
+        }
+
+        // Delete File
+        function deleteFile(id) {
+            fetch(`/api/file-upload/${id}`, {
+                method: 'DELETE'
+            })
+            .then(response => {
+                if (response.ok) {
+                    alert('File deleted successfully');
+                    fetchFileUploads();  // Refresh file list
+                } else {
+                    alert('Failed to delete file');
+                }
+            })
+            .catch(error => console.error('Error deleting file:', error));
+        }
 
         // Fetch data on page load
         window.onload = function() {
